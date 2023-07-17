@@ -2,8 +2,7 @@ import { MongoClient } from "mongodb";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
-  const uri =
-    "mongodb+srv://sumaiyarimu22:DJEme6b4HtqBna6o@cluster0.v2dcelb.mongodb.net/stock-management?retryWrites=true&w=majority";
+  const uri = process.env.MONGO_URL;
 
   const client = new MongoClient(uri);
   try {
@@ -19,8 +18,7 @@ export async function GET(request) {
 
 export async function POST(request) {
   let body = await request.json();
-  const uri =
-    "mongodb+srv://sumaiyarimu22:DJEme6b4HtqBna6o@cluster0.v2dcelb.mongodb.net/stock-management?retryWrites=true&w=majority";
+  const uri = process.env.MONGO_URL;
 
   const client = new MongoClient(uri);
   try {
