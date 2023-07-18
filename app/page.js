@@ -4,13 +4,17 @@ import { useState, useEffect } from "react";
 
 const HomePAge = () => {
   const [productForm, setProductForm] = useState({});
+  const [products, setProducts] = useState([]);
+  const [alert, setAlert] = useState("");
 
-  // Sample stock data (you can replace this with your actual stock data)
-  const stockData = [
-    { id: 1, name: "Product A", quantity: 10, price: 25 },
-    { id: 2, name: "Product B", quantity: 15, price: 30 },
-    { id: 3, name: "Product C", quantity: 20, price: 15 },
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const response = await fetch("/api/product");
+      let rjson = await response.json();
+      setProducts(rjson.products);
+    };
+    fetchProducts();
+  }, []);
 
   const addProduct = async (e) => {
     e.preventDefault();
@@ -26,6 +30,8 @@ const HomePAge = () => {
 
       if (response.ok) {
         console.log("Product added successfully!");
+        setAlert("Your Product has been added");
+        setProductForm({});
       } else {
         console.log("Failed to add product");
       }
@@ -39,11 +45,12 @@ const HomePAge = () => {
   return (
     <>
       <Header />
+      <div className="text-green-700 text-center">{alert}</div>
       {/* DISPLAY CURRENT STOCK */}
       <div className="container mx-auto bg-blue-200 px-5  my-10 md:p-10 rounded-lg">
         {/* SEARCH A PRODUCT */}
         <div className="container mx-auto  px-5 md:px-0 mt-4 py-8">
-          <h1 className="text-2xl font-bold mb-2">Search a Product</h1>
+          <h1 className="text-2xl font-semibold mb-2">Search a Product</h1>
           <div className="flex items-center">
             <input
               type="text"
@@ -60,7 +67,7 @@ const HomePAge = () => {
         </div>
 
         {/* ADD A NEW PRODUCT */}
-        <h1 className="font-bold">Add a Product</h1>
+        <h1 className="font-semibold text-2xl">Add a Product</h1>
 
         <form className="mt-4">
           <div className="mb-4">
@@ -71,6 +78,7 @@ const HomePAge = () => {
               Product Slug
             </label>
             <input
+              value={productForm?.slug || ""}
               name="slug"
               onChange={handleChange}
               type="text"
@@ -87,6 +95,7 @@ const HomePAge = () => {
               Quantity
             </label>
             <input
+              value={productForm?.quantity || ""}
               name="quantity"
               onChange={handleChange}
               type="number"
@@ -103,6 +112,7 @@ const HomePAge = () => {
               Price
             </label>
             <input
+              value={productForm?.priceForm || ""}
               name="price"
               onChange={handleChange}
               type="number"
@@ -120,7 +130,7 @@ const HomePAge = () => {
             Add Product
           </button>
         </form>
-        <h1 className="text-2xl font-bold pt-8 ">Current Stock</h1>
+        <h1 className="text-2xl font-semibold pt-8 ">Current Stock</h1>
         <table className="table-auto w-full mt-4">
           <thead>
             <tr>
@@ -131,12 +141,12 @@ const HomePAge = () => {
             </tr>
           </thead>
           <tbody>
-            {stockData.map((item) => (
-              <tr key={item.id}>
-                <td className="border px-4 py-2">{item.id}</td>
-                <td className="border px-4 py-2">{item.name}</td>
-                <td className="border px-4 py-2">{item.quantity}</td>
-                <td className="border px-4 py-2">${item.price.toFixed(2)}</td>
+            {products.map((product, i) => (
+              <tr key={i}>
+                <td className="border px-4 py-2">{i + 1}</td>
+                <td className="border px-4 py-2">{product.slug}</td>
+                <td className="border px-4 py-2">{product.quantity}</td>
+                <td className="border px-4 py-2">₹{product.price}</td>
               </tr>
             ))}
           </tbody>

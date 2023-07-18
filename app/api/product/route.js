@@ -9,8 +9,8 @@ export async function GET(request) {
     const database = client.db("stock");
     const inventory = database.collection("inventory");
     const query = {};
-    const allProducts = await inventory.find(query).toArray();
-    return NextResponse.json({ allProducts });
+    const products = await inventory.find(query).toArray();
+    return NextResponse.json({ success: true, products });
   } finally {
     await client.close();
   }
