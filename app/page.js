@@ -9,20 +9,7 @@ const HomePAge = () => {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [dropdown, setDropdown] = useState([
-    {
-      _id: "64b57a9b13a384fe1ccf0125",
-      slug: "pant",
-      quantity: "7",
-      price: "467",
-    },
-    {
-      _id: "64b5800613a384fe1ccf0126",
-      slug: "Tshirt",
-      quantity: "34",
-      price: "2334",
-    },
-  ]);
+  const [dropdown, setDropdown] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -74,7 +61,7 @@ const HomePAge = () => {
   return (
     <>
       <Header />
-      <div className="text-green-700 text-center">{alert}</div>
+      <div className="text-green-700 text-center mt-5">{alert}</div>
 
       <div className="container mx-auto  px-5  my-10 md:p-10 rounded-lg">
         {/* SEARCH A PRODUCT */}
@@ -137,9 +124,21 @@ const HomePAge = () => {
                   className="flex justify-between  my-2 px-10 gap-5 border-b "
                   key={i}
                 >
-                  <span className=""> {item.slug}</span>
-                  <span className="">{item.price}</span>
-                  <span className="">{item.quantity}</span>
+                  <span className="">
+                    {item.slug} ({item.price} avaiable for ₹{item.quantity})
+                  </span>
+                  <div className="space-x-5">
+                    <button className="subtraact px-2 py-1 bg-blue-500 text-white rounded-md cursor-pointer">
+                      -
+                    </button>
+
+                    <span className="quantity inline-block w-4">
+                      ₹{item.quantity}
+                    </span>
+                    <button className="add px-2 py-1 bg-blue-500 text-white rounded-md cursor-pointer">
+                      +
+                    </button>
+                  </div>
                 </div>
               );
             })}
